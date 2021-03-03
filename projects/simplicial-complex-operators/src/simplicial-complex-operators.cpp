@@ -69,6 +69,8 @@ SparseMatrix<size_t> SimplicialComplexOperators::buildVertexEdgeAdjacencyMatrix(
     typedef Eigen::Triplet<size_t> T;
     std::vector<T> tripletList;
     tripletList.reserve(mesh->nEdges()*2);
+    geometry->requireVertexIndices();
+    geometry->requireEdgeIndices();
     for (Edge e : mesh->edges()) {
         tripletList.push_back(T(geometry->edgeIndices[e], geometry->vertexIndices[e.firstVertex()], 1));
         tripletList.push_back(T(geometry->edgeIndices[e], geometry->vertexIndices[e.secondVertex()], 1));
@@ -90,6 +92,8 @@ SparseMatrix<size_t> SimplicialComplexOperators::buildFaceEdgeAdjacencyMatrix() 
     typedef Eigen::Triplet<size_t> T;
     std::vector<T> tripletList;
     tripletList.reserve(mesh->nFaces()*3);
+    geometry->requireEdgeIndices();
+    geometry->requireFaceIndices();
     for (Face f : mesh->faces()) {
         for (Edge e : f.adjacentEdges()) {
             tripletList.push_back(T(geometry->faceIndices[f], geometry->edgeIndices[e], 1));
